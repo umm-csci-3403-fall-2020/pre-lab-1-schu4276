@@ -1,8 +1,15 @@
 # Log-processing-pre-lab <!-- omit in toc -->
 
 [![Wrap contents tests](../../workflows/Wrap%20tests/badge.svg)](../../actions?query=workflow%3A"Wrap+tests")
+[![Regex tests](../../workflows/Regex%20tests/badge.svg)](../../actions?query=workflow%3A"Regex+tests")
+[![Shellcheck](../../workflows/shellcheck/badge.svg)](../../actions?query=workflow%3A"shellcheck")
 
-This is the pre-lab for the "Log processing" lab. It gives you some additional readings, along with practice with shell scripting, using Google Charts, and regular expressions.
+This is the pre-lab for the "Log processing" lab. It gives you some additional readings, along with practice with:
+
+* Shell scripting
+* Using Google Charts
+* Creating tags in `git`
+* Regular expressions
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -10,37 +17,25 @@ This is the pre-lab for the "Log processing" lab. It gives you some additional r
 * [Pre-lab readings and resources](#pre-lab-readings-and-resources)
 * [Exercises](#exercises)
   * [Add Bats dependencies](#add-bats-dependencies)
+  * [Write clean code](#write-clean-code)
   * [Write `wrap_contents.sh`](#write-wrap_contentssh)
     * [Make a sample pie chart using `wrap_contents.sh`](#make-a-sample-pie-chart-using-wrap_contentssh)
+  * [Create a tag in `git`](#create-a-tag-in-git)
   * [Practice with regular expressions](#practice-with-regular-expressions)
     * [Regex examples](#regex-examples)
     * [Regex Exercises](#regex-exercises)
-    * [Regex 0](#regex-0)
-    * [Regex 1](#regex-1)
-    * [Regex 2](#regex-2)
-* [What to turn in](#what-to-turn-in)
-
-* [Overview](#overview)
-* [Pre-lab readings and resources](#pre-lab-readings-and-resources)
-* [Exercises](#exercises)
-  * [Add Bats dependencies](#add-bats-dependencies)
-  * [Write `wrap_contents.sh`](#write-wrap_contentssh)
-    * [Make a sample pie chart using `wrap_contents.sh`](#make-a-sample-pie-chart-using-wrap_contentssh)
-  * [Practice with regular expressions](#practice-with-regular-expressions)
-    * [Regex examples](#regex-examples)
-    * [Regex Exercises](#regex-exercises)
-    * [Regex 0](#regex-0)
-    * [Regex 1](#regex-1)
-    * [Regex 2](#regex-2)
+      * [Regex 0](#regex-0)
+      * [Regex 1](#regex-1)
+      * [Regex 2](#regex-2)
 * [What to turn in](#what-to-turn-in)
 
 ## Overview
 
 The goal of this pre-lab is to help prepare us for the "Log processing lab". In particular we'll provide a set of potentially useful readings on particular topics that might be useful, and do three small exercises:
 
-- [ ] Write a small "helper" shell script that will be useful when doing the lab itself.
-- [ ] See how we can use that helper script to construct HTML/Javascript files that use the Google Charts tools to generate a nice graph.
-- [ ] Experiment a little with regular expressions.
+* [ ] Write a small "helper" shell script that will be useful when doing the lab itself.
+* [ ] See how we can use that helper script to construct HTML/Javascript files that use the Google Charts tools to generate a nice graph.
+* [ ] Experiment a little with regular expressions.
 
 The *pre-lab* is an *individual* project, but the lab will be done in pairs. You should, again, clone your classroom repository and do your work in your copy. You should turn in the URL for your repository in whatever way the instructor requests.
 
@@ -81,11 +76,25 @@ git submodule add https://github.com/bats-core/bats-file test/test_helper/bats-f
 If you don't do this, or don't do it in the right place, etc., then your
 Bats tests will almost certainly not run.
 
+### Write clean code
+
+One of the badges at the top of this README is the result of running
+`shellcheck` on all the shell scripts in this repository. It should be
+green when you start the lab, and you want to keep it green as you
+work through the lab. If you ever want to check a file by hand before
+you commit or push your work, something like
+
+```bash
+shellcheck wrap_contents.sh
+```
+
+should do the trick.
+
 ### Write `wrap_contents.sh`
 
-> We've set up GitHub Actions for the tests associated with this part of
-the lab, and the "Wrap tests" badge at the top of this README
-should (eventually) turn green when those tests pass.
+> We've set up GitHub Actions for the tests associated with this
+> part of the lab, and the "Wrap tests" badge at the top of this
+> README should (eventually) turn green when those tests pass.
 
 In the full lab there are multiple occasions where we have some text that we want to wrap in a header and footer: The username distribution data is wrapped in its header and footer, the hours data is wrapped in its header and footer, the country distribution data is wrapped in its header and footer, and the combination of these texts is then wrapped in the overall header and footer. The script `wrap_contents.sh` is designed to automate this repeated process. It should take three arguments:
 
@@ -97,7 +106,7 @@ The second argument is a little odd because it's not an actual filename like the
 
 For example, this call:
 
-```
+```bash
 ./wrap_contents.sh gloop.txt bits target.html
 ```
 
@@ -117,7 +126,7 @@ To give you an idea of what `wrap_contents.sh` will be used for in the lab, ther
 
 If you wrote your `wrap_contents.sh` script correctly, this call
 
-```
+```bash
 ../wrap_contents.sh meats.txt bread my_chart.html
 ```
 
@@ -127,33 +136,78 @@ The file `chart_example/sample_chart.html` is an example of the kind of thing yo
 
 ---
 
+### Create a tag in `git`
+
+Every commit in `git` gives you a "point in time" you can return to
+by checking out that commit. This is important if, for example, a
+customer calls up with a problem with version 2.7 which you release
+back in March. You might have numerous other commits (including possible
+bug fixes and the beginnings of new features) in the version on your
+computer. So `git` allows you to `checkout` any commit, as a way of
+travelling to that moment in time.
+
+Unfortunately, the default IDs for commits (things
+like `2f413425143cf11c6fd8c0b2baf1cdfb8153e24f`, or `2f41342` for short)
+are hardly memorable.
+Luckily, [`git` gives a way to _tag_ a particular commit](https://git-scm.com/book/en/v2/Git-Basics-Tagging)
+with a string that will presumably be more readable or memorable.
+We'll practice that here by creating a tag after you finish
+the `wrap_contents.sh` part of the lab. (Don't worry if you did it
+first or second, or interleaved the two parts, we'll just create a
+tag whenever you finish the `wrap_contents.sh` part of the lab.)
+
+To create a tag all you need to do is:
+
+```bash
+git tag -a <tag> -m <annotation>
+```
+
+where `<tag>` is the _tag name_ (often something like `v2.7`) and the
+`<annotation>` is the tagging message, much like a commit message that
+documents the creation of the tag. If you leave off the `-m <annotation>`
+part, it will open up an editor and give you a chance to enter an
+annotation there.
+
+:memo: **For this part of the lab use the tag `finished-wrap-contents`.**
+You can you any reasonable annotation message.
+
+To see the info about a tag, the command `git show <tag>` (e.g.,
+`git show v2.7`) will show you who made the tag and when, along with
+the annotation message. So you can use `git show finished-wrap-contents`
+to confirm that you've in fact made the desired tag.
+
+We're not going to use it here, but there is also a way to connect tags
+in `git` to _releases_ in GitHub. These can have additional information,
+as well as file artifacts like ZIP files containing the contents of the
+repository at that moment in time.
+
+---
+
 ### Practice with regular expressions
 
 _Regular expressions_ (or "regex" for short)
 are an extremely important tool in
 all software development, and they come up a _lot_ in systems
 work and scripting. Like so many things, learning the most
-commonly used 10% is 90% of the battle; not that many people
+commonly used 10% is 90% of the battle; few people
 can use the more esoteric features without looking things up.
 
 There are a _bunch_ of on-line resources to help you learn
 to use regular expressions. A few that you might look
 at include:
 
-- https://regexone.com – a very nice, structured tutorial
+* [RegexOne.com](https://regexone.com) is a very nice, structured tutorial
   that takes you from the basics up through advanced usages
   in a nicely paced way.
-- http://play.inginf.units.it – a structured game that
-  also takes you from the basics up through advanced usage,
-  although it gets tricky fairly quickly. You have to
-  "pseudo-register", but
-  you can in fact just make stuff up if you want to.
-- https://regexcrossword.com – fun if you like your learning
+* [RegexCrossword.com](https://regexcrossword.com) is fun if you like
+  your learning
   in a more puzzle-oriented form. They provide a set of
   "crosswords" where the clues are regular expressions, and
   you have to figure out what letter fits in a box and
-  satisfies the regexes for that cells row and column. Gets
-  tricky pretty fast.
+  satisfies the regexes for that cells row and column. The "Tutorial"
+  puzzles introduce all the basic ideas, and then the others
+  reinforce and expand on those. The advanced ones can be quite
+  tricky.
 
 As well as _learning_ tools like those above, there are also
 some neat tools that allow you to just check that your
@@ -192,14 +246,23 @@ and `[[:alnum:]]`, which is `[a-zA-Z0-9]`, but nothing that
 is exactly what `\w` since `alnum` doesn't include the
 underscore.
 
-Sigh – history is complicated.
+**Many tools support the `-E` flag**, which gives you _extended_
+regular expressions. This provides most of the goodies you typically
+want, so that's a good thing to try if your tool (.e.g., `grep` or
+`sed`) doesn't seem to be handling regexes in the way you expected.
+
+Sigh – history is complicated, even in computer science.
+
+```english
+¯\_(ツ)_/¯
+```
 
 #### Regex examples
 
 To illustrate these differences, imagine we have an input
 file `r0_input.txt` that contains
 
-```
+```english
 * KK, muffins
 * Nic, donuts
 * Vincent, juice
@@ -208,7 +271,7 @@ file `r0_input.txt` that contains
 and we want to match and print out the name and
 breakfast snack in the form:
 
-```
+```english
 1. KK
 2. muffins
 
@@ -252,11 +315,14 @@ awk 'match($0, /([[:alpha:]]+), ([[:alpha:]]+)/, groups) {print "1. " groups[1] 
 
 #### Regex Exercises
 
+> There's a GitHub Action set up for these tests as well, with
+> a corresponding badge up at the top of the README.
+
 In the `regex` folder there are three input files:
 
 * `r0_input.txt`
 * `r1_input.txt`
-* `r2_intput.txt`
+* `r2_input.txt`
 
 You should write a script `regex.sh` (in the folder `regex`)
 that uses a tool like
@@ -266,11 +332,11 @@ output should go in a file with the name `r0_output.txt`,
 `r1_output.txt`, and `r2_output.txt`, respectively.
 (And yes, we basically did one for you.)
 
-#### Regex 0
+##### Regex 0
 
 **Input:**
 
-```
+```english
 * KK, muffins
 * Nic, donuts
 * Vincent, juice
@@ -278,7 +344,7 @@ output should go in a file with the name `r0_output.txt`,
 
 **Output:**
 
-```
+```english
 1. KK
 2. muffins
 
@@ -289,35 +355,35 @@ output should go in a file with the name `r0_output.txt`,
 2. juice
 ```
 
-#### Regex 1
+##### Regex 1
 
 **Input:**
 
-```
+```english
 * I am KK. My favorite sandwich is turkey.
-* I am Nic. My favorite sandwich is avacado.
+* I am Nic. My favorite sandwich is avocado.
 * I am awesome. I love puppies, but I don't like sandwiches.
 * I am Vincent. My favorite sandwich is ham.
 ```
 
 **Output:**
 
-```
+```english
 1. KK
 2. turkey
 
 1. Nic
-2. avacado
+2. avocado
 
 1. Vincent
 2. ham
 ```
 
-#### Regex 2
+##### Regex 2
 
 **Input:**
 
-```
+```english
 * sandwich with turkey.bacon.swiss. for here
 * sandwich with ham.cheddar. to go
 * sandwich with tunaSalad. to go
@@ -325,7 +391,7 @@ output should go in a file with the name `r0_output.txt`,
 
 **Output:**
 
-```
+```english
 1. turkey.bacon.swiss.
 2. for here
 
@@ -341,9 +407,10 @@ output should go in a file with the name `r0_output.txt`,
 Be sure to complete the following before the start of lab:
 
 * Accept (individually) the github classroom assignment
-* Do the Exercises (adding and commiting as you go)
-   - [ ] Complete `wrap_contents.sh` (Exercise 1)
-   - [ ] Produce `my_chart.html` with the pie chart (Exercise 2)
-   - [ ] Implement `regex.sh` (Exercise 3)
-* Make sure you push your changes up to Gitub.
+* Do the Exercises (adding and committing as you go)
+  * [ ] Complete `wrap_contents.sh`
+  * [ ] Produce `my_chart.html` with the pie chart
+  * [ ] Create a `git` tag after finishing `wrap_contents.sh`
+  * [ ] Implement `regex.sh`
+* Make sure you push your changes up to GitHub.
 * Submit your URL to canvas when you are ready to be graded.
